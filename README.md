@@ -21,6 +21,7 @@ Copy the address that was just printed. Add it to the stratum config, fix the co
 
     `cd ~/stratum-mining-litecoin`
     `nano conf/config.py`
+    `byobu`
     `twistd -ny launcher.tac`
     
 Stratum should probably show that the coin is downloading blocks. If it's not you fucked something up.
