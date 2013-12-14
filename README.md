@@ -19,7 +19,7 @@ Start the daemon, it should fail but will create some folders. Then set up the b
     `<coin>d -conf=coin.conf getinfo`
     `<coin>d -conf=coin.conf getaccountaddress hashbros`
 
-Copy the address that was just printed. Add it to the stratum config, fix the config, and start stratum.
+Copy the address that was just printed. Add it to the stratum config at the top as "CENTRAL WALLET", change the "LITECOIN_TRUSTED_USER" to "coin", and start stratum.
 
     `cd ~/stratum-mining-litecoin`
     `nano conf/config.py`
