@@ -16,3 +16,11 @@ Set up the binary and start getting blocks, also make a new wallet for stratum
     `cd `/.<coin>`
     `<coin>d -conf=coin.conf -daemon`
     `<coin>d -conf=coin.conf getaccountaddress hashbros`
+
+Copy the address that was just printed. Add it to the stratum config, fix the config, and start stratum.
+
+    `cd ~/stratum-mining-litecoin`
+    `nano conf/config.py`
+    `twistd -ny launcher.tac`
+    
+Stratum should probably show that the coin is downloading blocks. If it's not you fucked something up.
