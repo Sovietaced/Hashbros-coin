@@ -16,6 +16,7 @@ Start the daemon, it should fail but will create some folders. Then set up the b
     `cp ~/.coin.conf ~/.<coin>`
     `cd `/.<coin>`
     `<coin>d -conf=coin.conf -daemon`
+    `<coin>d -conf=coin.conf getinfo`
     `<coin>d -conf=coin.conf getaccountaddress hashbros`
 
 Copy the address that was just printed. Add it to the stratum config, fix the config, and start stratum.
