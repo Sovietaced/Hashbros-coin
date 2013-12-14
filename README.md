@@ -9,8 +9,9 @@ The Hashbros-coin web app is a coin agnostic web API that interacts with the Str
 
 After installing coin for server...
 
-Set up the binary and start getting blocks, also make a new wallet for stratum
-
+Start the daemon, it should fail but will create some folders. Then set up the binary and start getting blocks, also make a new wallet for stratum
+    
+    `<coind>d`
     `cp <coin>d /usr/bin/`
     `cp ~/.coin.conf ~/.<coin>`
     `cd `/.<coin>`
