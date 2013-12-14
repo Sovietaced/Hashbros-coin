@@ -42,7 +42,6 @@ end
 # Use Capistrano for deployment
 gem 'capistrano', group: :development
 gem 'rvm-capistrano', group: :development
-gem 'secret_token_replacer', :git => 'git://github.com/digineo/secret_token_replacer.git'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
