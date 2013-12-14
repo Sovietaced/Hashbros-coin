@@ -1,7 +1,6 @@
 require "capistrano/ext/multistage"
 require "bundler/capistrano"
 require "rvm/capistrano"
-require 'secret_token_replacer/recipes'
 
 set :application, "Hashbros-coin"
 set :stages, ["production"]
