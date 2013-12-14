@@ -5,6 +5,7 @@ set :stages, ["production"]
 set :default_stage, "production"
 
 set :scm, :git
+set :scm_user, "Sovietaced/Hashbros-coin"
 set :repository,  "git@github.com:Sovietaced/Hashbros-coin.git"
 set :branch, "master"
 set :deploy_via, :remote_cache
