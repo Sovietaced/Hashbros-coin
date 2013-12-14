@@ -14,3 +14,6 @@ set :use_sudo, false
 
 # So sudo password doesn't throw errors
 default_run_options[:pty] = true
+
+# After restart the web server
+after "deploy", "deploy:restart_daemons" 
