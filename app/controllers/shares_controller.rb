@@ -2,6 +2,7 @@ class SharesController < ApplicationController
 
 	def index
 		@share = Share.first.to_json
+		@time = Share.first.time
 	end
 
 	def show
