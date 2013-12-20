@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131220070053) do
+ActiveRecord::Schema.define(version: 20131220072112) do
+
+  create_table "pool_worker", force: true do |t|
+    t.integer "account_id"
+    t.string  "username"
+    t.string  "password"
+    t.integer "hashrate"
+    t.float   "difficulty"
+  end
 
   create_table "shares", force: true do |t|
     t.string   "rem_host"
