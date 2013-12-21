@@ -5,6 +5,8 @@ HashbrosCoin::Application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'home#index'
 
+  get 'dump/:address' => 'home#dump'
+
   resources :shares
   resources :pool_worker
   # Example of regular route:
