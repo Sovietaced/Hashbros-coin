@@ -42,7 +42,7 @@ class HomeController < ApplicationController
   		# Determine their reject rate for this round
   		reject_rate = num_rejected.to_f / (num_accepted + num_rejected)
 
-  		work[worker] = {:accepted_shares => num_accepted, :rejected_shares => num_rejected, :work => percentage_of_work, :reject_rate => reject_rate}
+  		work[worker] = {:accepted_shares => num_accepted, :rejected_shares => num_rejected, :percentage_of_work => percentage_of_work, :reject_rate => reject_rate}
   	end
 
   	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :blocks => blocks, :work => work}
