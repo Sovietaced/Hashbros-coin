@@ -12,7 +12,8 @@ class HomeController < ApplicationController
   end
 
   def test
-   	@blah = %x(cd ~/.litecoin; litecoind -conf=coin.conf getinfo 2>&1)
-	#{}%x(socat tcp-listen:3333 tcp-connect:#{new_round_coin.name}.hashbros.co.in:3333 > log/switch.log 2>&1 &)
+   	balance = %x(cd ~/.litecoin; litecoind -conf=coin.conf getbalance hashbros 2>&1)
+   	@blah = params
+   	#@blah = %x(cd ~/.litecoin; litecoind -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{balance} 2>&1)
   end 
 end
