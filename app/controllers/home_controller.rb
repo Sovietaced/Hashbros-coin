@@ -45,6 +45,6 @@ class HomeController < ApplicationController
   		work[worker] = {:accepted_shares => num_accepted, :rejected_shares => num_rejected, :work => percentage_of_work, :reject_rate => reject_rate}
   	end
 
-  	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :blocks => blocks, :work => work}
+  	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :blocks => blocks, :work => percentage_of_work}
   end
 end
