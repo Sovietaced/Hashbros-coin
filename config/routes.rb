@@ -6,6 +6,7 @@ HashbrosCoin::Application.routes.draw do
   root 'home#index'
 
   get 'dump/:address' => 'home#dump'
+  get 'test' => 'home#test'
 
   resources :shares
   resources :pool_worker
