@@ -4,21 +4,25 @@ class HomeController < ApplicationController
   def index
   end
 
-  # Dump to exchange
-  def dump
-  	# Address of echange wallet
-  	@address = params[:address]
-
-  	# Fork command of <coind>d -conf=coin.conf send <@address>
-
-  end
-
-  def test
+  def deposit
     balance = %x(cd ~/.litecoin; litecoind -conf=coin.conf getbalance hashbros 2>&1)
     if system("cd ~/.litecoin; litecoind -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{balance}")
-    	respond_with({:result => :success})
+    	render :json => {:result => :success}
     else
-    	respond_with({:result => :failure})
+    	render :json => {:result => :failure}
     end
-  end 
+  end
+
+  # Start and Stop times in integer (string) epoch time
+  def summary
+
+  	# parse parameters to datetime objects
+  	start = Time.at(params[:start].to_i)
+  	stop = Time.at(params[:stop].to_i)
+
+  	# find all shares within the range <3 rails
+  	round_shares = Share.where(:time => start..stop)
+
+  	render :json => round_shares
+  end
 end
