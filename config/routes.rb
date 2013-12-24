@@ -7,6 +7,7 @@ HashbrosCoin::Application.routes.draw do
 
   post 'summary' => 'home#summary'
   post 'deposit' => 'home#deposit'
+  get 'worker_stats' => 'home#worker_stats'
 
   resources :shares
   resources :pool_worker

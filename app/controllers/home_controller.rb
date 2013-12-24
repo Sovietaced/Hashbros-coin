@@ -14,6 +14,12 @@ class HomeController < ApplicationController
     end
   end
 
+  def worker_stats
+    workers = PoolWorker.where.not(:hashrate => nil)
+    render :json => workers
+
+  end
+
   # Start and Stop times in integer (string) epoch time
   def summary
 
