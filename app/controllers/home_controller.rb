@@ -15,8 +15,17 @@ class HomeController < ApplicationController
   end
 
   def worker_stats
+
+    # We only care about active workers
     workers = PoolWorker.where.not(:hashrate => nil)
-    render :json => workers
+    
+    stats = {}
+
+    workers.each do |worker|
+      stats[worker] => {:username => worker.username, :hashrate => worker.hashrate, :difficutly => worker.difficulty}
+    end
+
+    render :json => stats
 
   end
 
