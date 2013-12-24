@@ -6,6 +6,7 @@ class HomeController < ApplicationController
 
   def deposit
     balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance hashbros 2>&1)
+    balance = balance.strip
     if system("cd ~/.litecoin; litecoind -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{balance}")
     	render :json => {:result => :success}
     else
@@ -16,7 +17,7 @@ class HomeController < ApplicationController
   # Start and Stop times in integer (string) epoch time
   def summary
 
-    balance = %x(cd ~/.litecoin; litecoind -conf=coin.conf getbalance hashbros 2>&1)
+    balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance hashbros 2>&1)
   	balance = balance.strip
     
     # parse parameters to datetime objects

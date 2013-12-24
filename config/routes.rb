@@ -5,7 +5,7 @@ HashbrosCoin::Application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'home#index'
 
-  get 'summary/:start/:stop' => 'home#summary'
+  post 'summary' => 'home#summary'
   post 'deposit' => 'home#deposit'
 
   resources :shares
