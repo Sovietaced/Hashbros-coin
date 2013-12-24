@@ -7,7 +7,7 @@ class HomeController < ApplicationController
   def deposit
     balance = %x(cd ~/.litecoin; litecoind -conf=coin.conf getbalance hashbros 2>&1)
     if system("cd ~/.litecoin; litecoind -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{balance}")
-    	render :json => {:result => :success}
+    	render :json => {:result => :success, :balance => balance}
     else
     	render :json => {:result => :failure}
     end
