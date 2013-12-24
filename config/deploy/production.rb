@@ -1,4 +1,4 @@
-servers = ["litecoin.hashbros.co.in","galaxycoin.hashbros.co.in"]
+servers = ["litecoin.hashbros.co.in","galaxycoin.hashbros.co.in, dogecoin.hashbros.co.in"]
 servers.each do |server|
 	role :web, server                # Your HTTP server, Apache/etc
 	role :app, server                # This may be the same as your `Web` server
