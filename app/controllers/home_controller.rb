@@ -23,7 +23,7 @@ class HomeController < ApplicationController
     stats = []
 
     workers.each do |worker|
-      stats.push({:username => worker.username, :hashrate => worker.hashrate, :difficutly => worker.difficulty})
+      stats.push({:username => worker.username, :hashrate => worker.hashrate, :difficulty => worker.difficulty})
     end
 
     render :json => stats
