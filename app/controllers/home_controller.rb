@@ -29,11 +29,11 @@ class HomeController < ApplicationController
       recent_shares = Share.where(:username => worker.username, :time => last_five)
 
       # Calculate the number of hashes with difficulty
-      total_hashes = 0
-      recent_shares.each { |share| total_hashes += share.difficulty }
+      total_shares = 0
+      recent_shares.each { |share| total_shares += share.difficulty }
       
-      # Find hash rate and divid by 1 million to get kilahashes.
-      hashrate = (2 ** 32) * total_hashes / seconds_in_five / 1000
+      # Find hash rate and divid by 1 million to get megahashes.
+      hashrate = (2 ** 16) * total_shares / (seconds_in_five * 1000000)
       
       stats.push({:username => worker.username, :hashrate => hashrate, :difficulty => worker.difficulty})
     end
