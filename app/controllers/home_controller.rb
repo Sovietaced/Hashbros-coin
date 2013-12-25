@@ -18,12 +18,24 @@ class HomeController < ApplicationController
   def worker_stats
 
     # We only care about active workers
-    workers = PoolWorker.where.not(:hashrate => nil)
+    workers = PoolWorker.all
     
     stats = []
 
     workers.each do |worker|
-      stats.push({:username => worker.username, :hashrate => worker.hashrate, :difficulty => worker.difficulty})
+      # We estimate the hash rate over the last 5 minutes
+      last_five = (5.minutes.ago..Time.now)
+      seconds_in_five = 300
+      recent_shares = Share.where(:username => worker.username, :time => last_five)
+
+      # Calculate the number of hashes with difficulty
+      total_hashes = 0
+      recent_shares.each { |share| total_hashes += share.difficulty }
+      
+      # Find hash rate and divid by 1 million to get kilahashes.
+      hashrate = (2 ** 32) * total_hashes / seconds_in_five / 1000
+      
+      stats.push({:username => worker.username, :hashrate => hashrate, :difficulty => worker.difficulty})
     end
 
     render :json => stats
