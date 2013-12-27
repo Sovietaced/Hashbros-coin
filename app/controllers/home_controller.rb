@@ -58,6 +58,8 @@ class HomeController < ApplicationController
   	num_round_shares_accepted = round_shares.where(:our_result => "Y").count
   	num_round_shares_rejected = round_shares.where(:our_result => "N").count
 
+    reject_rate = num_round_shares_rejected.to_f / round_shares.count
+    
   	# determine the number of blocks found
   	blocks = round_shares.where(:upstream_result => "Y").count
 
@@ -77,6 +79,6 @@ class HomeController < ApplicationController
   		work[worker] = {:accepted_shares => num_accepted, :rejected_shares => num_rejected, :percentage_of_work => percentage_of_work, :reject_rate => reject_rate}
   	end
 
-  	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :blocks => blocks, :work => work}
+  	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :blocks => blocks, :work => work, :coins => balance, :reject_rate => reject_rate}
   end
 end
