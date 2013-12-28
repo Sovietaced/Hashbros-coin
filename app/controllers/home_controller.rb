@@ -8,7 +8,7 @@ class HomeController < ApplicationController
     balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance "" 2>&1)
     balance = balance.strip
     transfer_id = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{balance} Hashbros)
-    transfer_id = transfer_if.strip
+    transfer_id = transfer_id.strip
     if $?.success?
       render :json => {:result => :success, :balance => balance, :transfer_id => transfer_id}
     else
