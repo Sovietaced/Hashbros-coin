@@ -5,12 +5,14 @@ class HomeController < ApplicationController
   end
 
   def deposit
-    balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance hashbros 2>&1)
+    balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance "" 2>&1)
     balance = balance.strip
-    if system("cd #{params[:dir]}; #{params[:damon]} -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{balance} Hashbros")
-    	render :json => {:result => :success, :balance => balance}
+    transfer_id = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{balance} Hashbros)
+    transfer_id = transfer_if.strip
+    if $?.success?
+      render :json => {:result => :success, :balance => balance, :transfer_id => transfer_id}
     else
-    	render :json => {:result => :failure}
+    	render :json => {:result => :failure, :balance => balance}
     end
   end
 
@@ -45,7 +47,7 @@ class HomeController < ApplicationController
   # Start and Stop times in integer (string) epoch time
   def summary
 
-    balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance hashbros 2>&1)
+    balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance "" 2>&1)
   	balance = balance.strip
     
     # parse parameters to datetime objects
