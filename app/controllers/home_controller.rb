@@ -49,13 +49,11 @@ class HomeController < ApplicationController
 
   # Start and Stop times in integer (string) epoch time
   def summary
-
-    balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance "" 2>&1)
-    balance = balance.strip
     
     # parse parameters to datetime objects
   	start = Time.at(params[:start].to_i)
   	stop = Time.at(params[:stop].to_i)
+    time = start..stop
 
   	# find all shares within the range <3 rails
   	round_shares = Share.where(:time => start..stop)
@@ -82,6 +80,14 @@ class HomeController < ApplicationController
   		work[worker] = {:accepted_shares => num_accepted, :rejected_shares => num_rejected, :percentage_of_work => percentage_of_work, :reject_rate => reject_rate}
   	end
 
-  	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :blocks => blocks, :work => work, :coins => balance, :reject_rate => reject_rate}
+    api_call = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf listtransactions 2>&1)
+    # Need to verify deposit was successful
+    transaction_json = ActiveSupport::JSON.decode(api_call)
+
+    json_blocks = []
+    Rails.logger.info transaction_json
+    transaction_json.each { |transaction| json_blocks.push(transaction) if (transaction["category"] == "generate" or transaction["category"] == "immature") and transaction["time"] === time }
+
+  	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :blocks => blocks, :work => work, :reject_rate => reject_rate}
   end
 end
