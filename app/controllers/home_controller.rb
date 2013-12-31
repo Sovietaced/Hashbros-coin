@@ -62,10 +62,9 @@ class HomeController < ApplicationController
   	num_round_shares_rejected = round_shares.where(:our_result => "N").count
 
     reject_rate = (num_round_shares_rejected.to_f / round_shares.count) * 100
-    
-  	# determine the number of blocks found
-  	blocks = round_shares.where(:upstream_result => "Y").count
 
+
+    ''' Worker data '''
   	# get a unique array of the workers involved
   	workers = round_shares.pluck(:username).uniq
 
@@ -80,13 +79,14 @@ class HomeController < ApplicationController
   		work[worker] = {:accepted_shares => num_accepted, :rejected_shares => num_rejected, :percentage_of_work => percentage_of_work, :reject_rate => reject_rate}
   	end
 
+    ''' Block data '''
     api_call = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf listtransactions 2>&1)
     # Need to verify deposit was successful
     transaction_json = ActiveSupport::JSON.decode(api_call)
 
-    json_blocks = []
-    Rails.logger.info transaction_json
-    transaction_json.each { |transaction| json_blocks.push(transaction) if (transaction["category"] == "generate" or transaction["category"] == "immature") and transaction["time"] === time }
+    blocks = []
+
+    transaction_json.each { |transaction| blocks.push(transaction) if (transaction["category"] == "generate" or transaction["category"] == "immature") and time === Time.at(transaction["time"].to_datetime }
 
   	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :blocks => blocks, :work => work, :reject_rate => reject_rate}
   end
