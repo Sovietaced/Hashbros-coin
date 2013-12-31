@@ -63,7 +63,7 @@ class HomeController < ApplicationController
   	num_round_shares_accepted = round_shares.where(:our_result => "Y").count
   	num_round_shares_rejected = round_shares.where(:our_result => "N").count
 
-    reject_rate = num_round_shares_rejected.to_f / round_shares.count
+    reject_rate = (num_round_shares_rejected.to_f / round_shares.count) * 100
     
   	# determine the number of blocks found
   	blocks = round_shares.where(:upstream_result => "Y").count
