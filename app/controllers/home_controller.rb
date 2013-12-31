@@ -13,7 +13,7 @@ class HomeController < ApplicationController
     transfer_id = transfer_id.strip
     
     if $?.success?
-      render :json => {:result => :success, :balance => balance, :transfer_id => transfer_id}
+      render :json => {:result => :success, :balance => balance, :txid => transfer_id}
     else
     	render :json => {:result => :failure, :balance => balance}
     end
