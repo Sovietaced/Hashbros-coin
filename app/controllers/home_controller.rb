@@ -5,10 +5,13 @@ class HomeController < ApplicationController
   end
 
   def deposit
+    
     balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance "" 2>&1)
     balance = balance.strip
+
     transfer_id = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{balance} Hashbros)
     transfer_id = transfer_id.strip
+    
     if $?.success?
       render :json => {:result => :success, :balance => balance, :transfer_id => transfer_id}
     else
@@ -48,7 +51,7 @@ class HomeController < ApplicationController
   def summary
 
     balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance "" 2>&1)
-  	balance = balance.strip
+    balance = balance.strip
     
     # parse parameters to datetime objects
   	start = Time.at(params[:start].to_i)
