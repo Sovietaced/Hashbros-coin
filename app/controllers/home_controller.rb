@@ -86,7 +86,7 @@ class HomeController < ApplicationController
 
     blocks = []
 
-    transaction_json.each { |transaction| blocks.push(transaction) if (transaction["category"] == "generate" or transaction["category"] == "immature") and Time.at(transaction["time"]).to_datetime.between? time }
+    transaction_json.each { |transaction| blocks.push(transaction) if (transaction["category"] == "generate" or transaction["category"] == "immature") and time.include? Time.at(transaction["time"]).to_datetime }
 
   	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :blocks => blocks, :work => work, :reject_rate => reject_rate}
   end
