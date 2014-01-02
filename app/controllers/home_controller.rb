@@ -47,6 +47,24 @@ class HomeController < ApplicationController
 
   end
 
+  def blocks
+
+    start = Time.at(params[:start].to_i)
+    stop = Time.at(params[:stop].to_i)
+    time = start..stop
+
+    ''' Block data '''
+    api_call = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf listtransactions 2>&1)
+    # Need to verify deposit was successful
+    transaction_json = ActiveSupport::JSON.decode(api_call)
+
+    blocks = []
+
+    transaction_json.each { |transaction| blocks.push(transaction) if (transaction["category"] == "generate" or transaction["category"] == "immature") and time.cover? Time.at(transaction["time"]).to_datetime }
+    
+    render :json => blocks
+  end
+
   # Start and Stop times in integer (string) epoch time
   def summary
     
@@ -79,15 +97,6 @@ class HomeController < ApplicationController
   		work[worker] = {:accepted_shares => num_accepted, :rejected_shares => num_rejected, :percentage_of_work => percentage_of_work, :reject_rate => reject_rate}
   	end
 
-    ''' Block data '''
-    api_call = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf listtransactions 2>&1)
-    # Need to verify deposit was successful
-    transaction_json = ActiveSupport::JSON.decode(api_call)
-
-    blocks = []
-
-    transaction_json.each { |transaction| blocks.push(transaction) if (transaction["category"] == "generate" or transaction["category"] == "immature") and time.cover? Time.at(transaction["time"]).to_datetime }
-
-  	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :blocks => blocks, :work => work, :reject_rate => reject_rate}
+  	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :work => work, :reject_rate => reject_rate}
   end
 end
