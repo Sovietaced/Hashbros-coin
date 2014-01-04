@@ -5,17 +5,14 @@ class HomeController < ApplicationController
   end
 
   def deposit
-    
-    balance = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getbalance "" 2>&1)
-    balance = balance.strip
 
-    transfer_id = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{balance} Hashbros)
+    transfer_id = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{params[:amount]} "" 2>&1)
     transfer_id = transfer_id.strip
     
     if $?.success?
-      render :json => {:result => :success, :balance => balance, :txid => transfer_id}
+      render :json => {:result => :success, :txid => transfer_id}
     else
-    	render :json => {:result => :failure, :balance => balance}
+    	render :json => {:result => :failure}
     end
   end
 
