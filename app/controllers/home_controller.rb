@@ -54,13 +54,13 @@ class HomeController < ApplicationController
     time = start..stop
 
     ''' Block data '''
-    api_call = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf listtransactions 1000000 "" 2>&1)
+    api_call = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf listtransactions "" 1000000 2>&1)
     # Need to verify deposit was successful
     transaction_json = ActiveSupport::JSON.decode(api_call)
 
     blocks = []
 
-    transaction_json.each { |transaction| blocks.push(transaction) if (transaction["category"] == "generate" or transaction["category"] == "immature") and time.cover? Time.at(transaction["time"]).to_datetime }
+    transaction_json.each { |transaction| blocks.push(transaction) if time.cover? Time.at(transaction["time"]).to_datetime }
     
     render :json => blocks
   end
