@@ -1,4 +1,4 @@
-servers = ["ps-lottocoin.hashbros.co.in", "ps-casinocoin.hashbros.co.in", "ps-grandcoin.hashbros.co.in", "ps-franko.hashbros.co.in", "franko.hashbros.co.in", "ps-alphacoin.hashbros.co.in", "ps-luckycoin.hashbros.co.in"]
+servers = ["ps-hobonickels.hashbros.co.in", "ps-neocoin.hashbros.co.in", "ps-cosmocoin.hashbros.co.in", "ps-lottocoin.hashbros.co.in", "ps-casinocoin.hashbros.co.in", "ps-grandcoin.hashbros.co.in", "ps-franko.hashbros.co.in", "franko.hashbros.co.in", "ps-alphacoin.hashbros.co.in", "ps-luckycoin.hashbros.co.in"]
 servers.each do |server|
 	role :web, server                # Your HTTP server, Apache/etc
 	role :app, server                # This may be the same as your `Web` server
