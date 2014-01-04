@@ -54,7 +54,7 @@ class HomeController < ApplicationController
     time = start..stop
 
     ''' Block data '''
-    api_call = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf listtransactions 2>&1)
+    api_call = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf listtransactions 1000000 2>&1)
     # Need to verify deposit was successful
     transaction_json = ActiveSupport::JSON.decode(api_call)
 
