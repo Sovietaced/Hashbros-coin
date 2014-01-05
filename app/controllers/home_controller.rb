@@ -57,7 +57,7 @@ class HomeController < ApplicationController
 
     blocks = []
 
-    transaction_json.each { |transaction| blocks.push(transaction) if time.cover? Time.at(transaction["time"]).to_datetime }
+    transaction_json.each { |transaction| blocks.push(transaction) if transaction["category"] != "send" and time.cover? Time.at(transaction["time"]).to_datetime }
     
     render :json => blocks
   end
