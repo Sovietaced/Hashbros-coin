@@ -62,6 +62,17 @@ class HomeController < ApplicationController
     render :json => blocks
   end
 
+  def coins
+
+    ''' Block data '''
+    api_call = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getmininginfo 2>&1)
+    info_json = ActiveSupport::JSON.decode(api_call)
+    
+    info = {:blocks => info_json["blocks"], :difficulty => info_json["difficulty"], :network_hash_rate => info_json["networkhashps"]}
+    
+    render :json => info
+  end
+
   # Start and Stop times in integer (string) epoch time
   def summary
     
