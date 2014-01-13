@@ -108,4 +108,21 @@ class HomeController < ApplicationController
 
   	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :work => work, :reject_rate => round_reject_rate}
   end
+
+  # Run two commands and make sure they dont return errors
+  def status
+     
+    %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getinfo 2>&1)
+    render :json => {:result => :failure} if not $?.success?
+    
+
+    if `ps aux | grep #{params[:daemon][0..-2]}[#{params[:daemon][-1]}]` == ""
+      render :json => {:result => :failure}
+    end
+
+    # Everything must be working
+    render :json => {:result => :success}
+  end
+
+
 end
