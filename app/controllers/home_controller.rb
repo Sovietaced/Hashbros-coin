@@ -111,12 +111,13 @@ class HomeController < ApplicationController
 
   # Run two commands and make sure they dont return errors
   def status
-     
+    
+    # Check the daemon
     %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf getinfo 2>&1)
     render :json => {:result => :failure} if not $?.success?
     
-
-    if `ps aux | grep #{params[:daemon][0..-2]}[#{params[:daemon][-1]}]` == ""
+    # Grep for stratum
+    if `ps aux | grep twist[d]` == ""
       render :json => {:result => :failure}
     end
 
