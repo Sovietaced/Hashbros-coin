@@ -9,8 +9,8 @@ HashbrosCoin::Application.routes.draw do
   post 'deposit' => 'home#deposit'
   post 'blocks' => 'home#blocks'
   post 'coins' => 'home#coins'
+  post 'status' => 'home#status'
   get 'worker_stats' => 'home#worker_stats'
-  get 'status' => 'home#status'
   
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
