@@ -10,6 +10,7 @@ HashbrosCoin::Application.routes.draw do
   post 'blocks' => 'home#blocks'
   post 'coins' => 'home#coins'
   post 'status' => 'home#status'
+  post 'validate_address' => 'home#validate_address'
   get 'worker_stats' => 'home#worker_stats'
   
   # Example of regular route:

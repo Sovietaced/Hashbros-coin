@@ -6,7 +6,7 @@ class HomeController < ApplicationController
 
   def deposit
 
-    transfer_id = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{params[:amount]} "" 2>&1)
+    transfer_id = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf sendtoaddress #{params[:exchange_address]} #{params[:amount]} 2>&1)
     transfer_id = transfer_id.strip
     
     if $?.success?
@@ -127,5 +127,15 @@ class HomeController < ApplicationController
     render :json => {:result => :success}
   end
 
+   def validate_address
 
+    api_call = %x(cd #{params[:dir]}; #{params[:daemon]} -conf=coin.conf validateaddress #{params[:address]} 2>&1)
+    address_json = ActiveSupport::JSON.decode(api_call)
+    
+    if address_json["isvalid"]
+      render :json => {:result => :success}
+    else
+      render :json => {:result => :failure}
+    end
+  end
 end
