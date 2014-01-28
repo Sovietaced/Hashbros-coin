@@ -18,7 +18,8 @@ servers = ["ps-megacoin.hashbros.co.in",
 	"ps-lottocoin.hashbros.co.in", 
 	"ps-casinocoin.hashbros.co.in", 
 	"ps-grandcoin.hashbros.co.in", 
-	"ps-franko.hashbros.co.in"]
+	"ps-franko.hashbros.co.in",
+	"ps-luckycoin.hashbros.co.in"]
 servers.each do |server|
 	role :web, server                # Your HTTP server, Apache/etc
 	role :app, server                # This may be the same as your `Web` server
