@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131220072112) do
+ActiveRecord::Schema.define(version: 20140131043701) do
 
   create_table "pool_worker", force: true do |t|
     t.integer "account_id"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(version: 20131220072112) do
     t.integer "hashrate"
     t.float   "difficulty"
   end
+
+  add_index "pool_worker", ["username"], name: "index_pool_worker_on_username"
 
   create_table "shares", force: true do |t|
     t.string   "rem_host"
@@ -31,5 +33,9 @@ ActiveRecord::Schema.define(version: 20131220072112) do
     t.datetime "time"
     t.float    "difficulty"
   end
+
+  add_index "shares", ["our_result"], name: "index_shares_on_our_result"
+  add_index "shares", ["time"], name: "index_shares_on_time"
+  add_index "shares", ["username"], name: "index_shares_on_username"
 
 end
