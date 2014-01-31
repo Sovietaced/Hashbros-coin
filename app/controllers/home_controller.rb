@@ -136,9 +136,9 @@ class HomeController < ApplicationController
       if work.has_key?(share.username)
         hash = work[share.username]
         if share.our_result == "Y"
-          work[share.username][:accepted_shares] = hash[:accepted_shares] + 1}
+          work[share.username][:accepted_shares] = hash[:accepted_shares] + 1
         else
-          work[share.username][:rejected_shares] = hash[:rejected_shares] + 1} 
+          work[share.username][:rejected_shares] = hash[:rejected_shares] + 1
         end
       # Create Hash
       else
