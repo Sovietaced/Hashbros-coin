@@ -148,6 +148,7 @@ class HomeController < ApplicationController
           work[share.username] = {:accepted_shares => 0, :rejected_shares => 1} 
         end
       end
+    end
 
     work.keys.each do |username|
       reject_rate = work[username][:rejected_shares].to_f / (work[username][:accepted_shares] + work[username][:rejected_shares])
