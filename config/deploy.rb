@@ -19,6 +19,9 @@ set :use_sudo, false
 # After restart the web server
 after "deploy", "deploy:restart_nginx" 
 
+# Run migrations after deploying
+after "deploy:update_code", "deploy:migrate"
+
 namespace :deploy do
   # Restarts nginx
   task :restart_nginx, :roles => :web do
