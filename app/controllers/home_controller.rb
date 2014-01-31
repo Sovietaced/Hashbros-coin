@@ -26,13 +26,9 @@ class HomeController < ApplicationController
       last_five = (5.minutes.ago..Time.now)
       seconds_in_five = 300
       recent_shares = Share.where(:username => worker.username, :time => last_five)
-
+      
       # We only want active users
       if not recent_shares.blank?
-
-        # In case our round is less than 5 mins
-        multiply_for_minutes = 300.0 / (Time.now - recent_shares.first.created_at.to_i)
-  
         # Calculate the number of hashes with difficulty
         total_shares = 0
         recent_shares.each { |share| total_shares += share.difficulty }
@@ -40,11 +36,6 @@ class HomeController < ApplicationController
         # Find hash rate and divide by 1 million to get megahashes.
         hashrate = (2 ** 16) * total_shares / (seconds_in_five * 1000000)
         
-        # Multiply if round is less than 5 mins
-        if multiply_for_minutes > 1.0
-          hashrate = hashrate * multiply_for_minutes
-        end
-
         stats.push({:username => worker.username, :hashrate => hashrate, :difficulty => worker.difficulty})
       end
     end
