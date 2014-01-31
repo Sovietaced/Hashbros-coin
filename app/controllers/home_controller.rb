@@ -111,6 +111,56 @@ class HomeController < ApplicationController
   	render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :work => work, :reject_rate => round_reject_rate}
   end
 
+  # Start and Stop times in integer (string) epoch time
+  def test
+    
+    # parse parameters to datetime objects
+    start = Time.at(params[:start].to_i)
+    stop = Time.at(params[:stop].to_i)
+    time = start..stop
+
+    # find all shares within the range <3 rails
+    round_shares = Share.where(:time => start..stop)
+
+    num_round_shares_accepted = round_shares.where(:our_result => "Y").count
+    num_round_shares_rejected = round_shares.where(:our_result => "N").count
+
+    round_reject_rate = (num_round_shares_rejected.to_f / round_shares.count) * 100
+
+
+    ''' Worker data '''
+    work = {}
+
+    round_shares.each do |share|
+      # Update hash if key found
+      if work.has_key?(share.username)
+        hash = work[share.username]
+        if share.our_result == "Y"
+          work[share.username][:accepted_shares] = hash[:accepted_shares] + 1}
+        else
+          work[share.username][:rejected_shares] = hash[:rejected_shares] + 1} 
+        end
+      # Create Hash
+      else
+        if share.our_result == "Y"
+          work[share.username] = {:accepted_shares => 1, :rejected_shares => 0}
+        else
+          work[share.username] = {:accepted_shares => 0, :rejected_shares => 1} 
+        end
+      end
+
+    work.keys.each do |username|
+      reject_rate = work[username][:rejected_shares].to_f / (work[username][:accepted_shares] + work[username][:rejected_shares])
+      # Calculate the percentage of work done, notice the float
+      percentage_of_work = work[username][:accepted_shares].to_f / num_round_shares_accepted
+
+      work[username][:percentage_of_work] = percentage_of_work
+      work[username][:reject_rate] = reject_rate
+    end
+
+    render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :work => work, :reject_rate => round_reject_rate}
+  end
+
   # Run two commands and make sure they dont return errors
   def status
     

@@ -6,6 +6,7 @@ HashbrosCoin::Application.routes.draw do
   root 'home#index'
 
   post 'summary' => 'home#summary'
+  post 'test' => 'home#test'
   post 'deposit' => 'home#deposit'
   post 'blocks' => 'home#blocks'
   post 'coins' => 'home#coins'
