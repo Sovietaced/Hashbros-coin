@@ -11,14 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140131043701) do
+ActiveRecord::Schema.define(version: 20140131091709) do
 
   create_table "pool_worker", force: true do |t|
-    t.integer "account_id"
-    t.string  "username"
-    t.string  "password"
-    t.integer "hashrate"
-    t.float   "difficulty"
+    t.integer  "account_id"
+    t.string   "username"
+    t.string   "password"
+    t.integer  "hashrate"
+    t.float    "difficulty"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "pool_worker", ["username"], name: "index_pool_worker_on_username"
@@ -32,6 +34,8 @@ ActiveRecord::Schema.define(version: 20140131043701) do
     t.string   "solution"
     t.datetime "time"
     t.float    "difficulty"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "shares", ["our_result"], name: "index_shares_on_our_result"

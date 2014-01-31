@@ -18,12 +18,10 @@ class HomeController < ApplicationController
 
   # Worker hashrate and difficulty for shares created in the last 5 minutes
   def worker_stats
-
-    workers = PoolWorker.all
     
     stats = []
 
-    workers.each do |worker|
+    PoolWorker.all.find_each do |worker|
       # We estimate the hash rate over the last 5 minutes
       last_five = (5.minutes.ago..Time.now)
       seconds_in_five = 300
