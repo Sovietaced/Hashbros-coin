@@ -18,26 +18,37 @@ class HomeController < ApplicationController
 
   # Worker hashrate and difficulty for shares created in the last 5 minutes
   def worker_stats
+
+    # We estimate the hash rate over the last 5 minutes
+    last_five = (5.minutes.ago..Time.now)
+    seconds_in_five = 300;
+
+    # Get shares in the last 5 mins
+    recent_shares = Share.where(:time => last_five)
     
+    workers = {}
+    
+    # Calculate numbers of shares and difficulty
+    recent_shares.each do |share|
+      # Update hash if key found
+      if workers.has_key?(share.username)
+        hash = workers[share.username]
+        workers[share.username][:shares] = hash[:shares] + share.difficulty
+        workers[share.username][:difficulty] = share.difficulty
+      # Create Hash
+      else
+        workers[share.username] = {:shares => 0, :difficulty => share.difficulty} 
+      end
+    end
+
     stats = []
 
-    PoolWorker.all.find_each do |worker|
-      # We estimate the hash rate over the last 5 minutes
-      last_five = (5.minutes.ago..Time.now)
-      seconds_in_five = 300
-      recent_shares = Share.where(:username => worker.username, :time => last_five)
-      
-      # We only want active users
-      if not recent_shares.blank?
-        # Calculate the number of hashes with difficulty
-        total_shares = 0
-        recent_shares.each { |share| total_shares += share.difficulty }
-        
-        # Find hash rate and divide by 1 million to get megahashes.
-        hashrate = (2 ** 16) * total_shares / (seconds_in_five * 1000000)
-        
-        stats.push({:username => worker.username, :hashrate => hashrate, :difficulty => worker.difficulty})
-      end
+    # Calculate hash rates from number of shares
+    workers.keys.each do |username|
+      worker = workers[username]
+      # Find hash rate and divide by 1 million to get megahashes.
+      hashrate = (2 ** 16) * worker[:shares].to_f / (seconds_in_five * 1000000)
+      stats.push({:username => username, :hashrate => hashrate, :difficulty => worker[:difficulty]})
     end
 
     render :json => stats
