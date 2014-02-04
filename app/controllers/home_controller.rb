@@ -95,8 +95,8 @@ class HomeController < ApplicationController
   	# find all shares within the range <3 rails
   	round_shares = Share.where(:time => start..stop)
 
-  	num_round_shares_accepted = round_shares.where(:our_result => "Y").count
-  	num_round_shares_rejected = round_shares.where(:our_result => "N").count
+  	num_round_shares_accepted = round_shares.where(:our_result => "Y").reduce(0) { |sum, share| sum + share.difficulty}
+  	num_round_shares_rejected = round_shares.where(:our_result => "N").reduce(0) { |sum, share| sum + share.difficulty}
 
     round_reject_rate = (num_round_shares_rejected.to_f / round_shares.count) * 100
 
@@ -109,16 +109,16 @@ class HomeController < ApplicationController
       if work.has_key?(share.username)
         hash = work[share.username]
         if share.our_result == "Y"
-          work[share.username][:accepted_shares] = hash[:accepted_shares] + 1
+          work[share.username][:accepted_shares] = hash[:accepted_shares] + share.difficulty
         else
-          work[share.username][:rejected_shares] = hash[:rejected_shares] + 1
+          work[share.username][:rejected_shares] = hash[:rejected_shares] + share.difficulty
         end
       # Create Hash
       else
         if share.our_result == "Y"
-          work[share.username] = {:accepted_shares => 1, :rejected_shares => 0}
+          work[share.username] = {:accepted_shares => share.difficulty, :rejected_shares => 0}
         else
-          work[share.username] = {:accepted_shares => 0, :rejected_shares => 1} 
+          work[share.username] = {:accepted_shares => 0, :rejected_shares => share.difficulty} 
         end
       end
     end
@@ -132,7 +132,7 @@ class HomeController < ApplicationController
       work[username][:reject_rate] = reject_rate
     end
 
-    render :json => {:total_shares => round_shares.count, :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :work => work, :reject_rate => round_reject_rate}
+    render :json => {:total_shares => (num_round_shares_accepted + num_round_shares_rejected), :accepted_shares => num_round_shares_accepted, :rejected_shares => num_round_shares_rejected, :work => work, :reject_rate => round_reject_rate}
   end
 
   # Run two commands and make sure they dont return errors
