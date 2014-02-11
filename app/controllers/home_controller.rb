@@ -98,7 +98,7 @@ class HomeController < ApplicationController
   	num_round_shares_accepted = round_shares.where(:our_result => "Y").reduce(0) { |sum, share| sum + share.difficulty}
   	num_round_shares_rejected = round_shares.where(:our_result => "N").reduce(0) { |sum, share| sum + share.difficulty}
 
-    round_reject_rate = (num_round_shares_rejected.to_f / round_shares.count) * 100
+    round_reject_rate = (num_round_shares_rejected.to_f / (num_round_shares_accepted + num_round_shares_rejected)) * 100
 
 
     ''' Worker data '''
